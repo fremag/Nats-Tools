@@ -8,9 +8,10 @@ namespace nats_tools
     {
         static int Main(string[] args)
         {
-            return CommandLine.Parser.Default.ParseArguments<ListenOptions>(args)
+            return CommandLine.Parser.Default.ParseArguments<ListenOptions, SendOptions>(args)
               .MapResult(
                 (ListenOptions opts) => RunCommand<ListenCommand, ListenOptions>(opts),
+                (SendOptions opts) => RunCommand<SendCommand, SendOptions>(opts),
                 errs => 1);
         }
 
