@@ -1,65 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using CommandLine;
-using NATS.Client;
 
 namespace nats_tools
 {
-    class NatsOptions
-    {
-        [CommandLine.Option('n', "nats", HelpText = "Nats server url, default: nats://localhost:4222")]
-        public string NatsUrl { get; set; } = "nats://localhost:4222";
-        public IConnection Connection { get; private set; }
-
-        public void Start()
-        {
-            NATS.Client.ConnectionFactory factory = new NATS.Client.ConnectionFactory();
-            Connection = factory.CreateConnection(NatsUrl);
-        }
-    }
-
-    [Verb("listen", HelpText = "Listen to NATS subject")]
-    class ListenOptions : NatsOptions
-    {
-        [CommandLine.Option('s', "subjects", HelpText = "Nats subjects to listen")]
-        public IEnumerable<string> Subjects { get; set; }
-
-        [CommandLine.Option('c', "count", HelpText = "Exists after c messages", Default = -1)]
-        public int Count { get; set; } = -1;
-
-        [CommandLine.Option('t', "time", HelpText = "Exits after t seconds", Default = -1)]
-        public int TimeS { get; set; } = -1;
-    }
-
     public class Program
     {
         static int Main(string[] args)
         {
             return CommandLine.Parser.Default.ParseArguments<ListenOptions>(args)
               .MapResult(
-                (ListenOptions opts) => ListenSubject(opts),
+                (ListenOptions opts) => RunCommand<ListenCommand, ListenOptions>(opts),
                 errs => 1);
         }
 
-        static int ListenSubject(ListenOptions options)
+        static int RunCommand<TCommand, TOption>(TOption options) where TOption : AbstractNatsOptions where TCommand : AbstractNatsCommand<TOption>, new()
         {
-            options.Start();
-            if (options.Subjects == null || !options.Subjects.Any())
-            {
-                options.Subjects = new[] { ">" };
-            }
-            foreach (var subject in options.Subjects)
-            {
-                Console.WriteLine($"Listen: {subject}");
-                options.Connection.SubscribeAsync(subject, OnMessage);
-            }
-            return 0;
-        }
-
-        private static void OnMessage(object sender, MsgHandlerEventArgs e)
-        {
-            Console.WriteLine($"{DateTime.Now:HH:mm:ss}\t{e.Message.Subject}\t{e.Message.Data.Length}");
+            var command = new TCommand();
+            command.Init(options);
+            return command.Run();
         }
     }
 }
