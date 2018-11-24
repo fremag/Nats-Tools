@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using CommandLine;
 using NATS.Client;
 
@@ -7,7 +8,7 @@ namespace nats_tools
 {
     class NatsOptions
     {
-        [CommandLine.Option('n', "nats", HelpText="Nats server url, default: nats://localhost:4222")]
+        [CommandLine.Option('n', "nats", HelpText = "Nats server url, default: nats://localhost:4222")]
         public string NatsUrl { get; set; } = "nats://localhost:4222";
         public IConnection Connection { get; private set; }
 
@@ -21,13 +22,13 @@ namespace nats_tools
     [Verb("listen", HelpText = "Listen to NATS subject")]
     class ListenOptions : NatsOptions
     {
-        [CommandLine.Option('s', "subjects", HelpText="Nats subjects to listen", Default=">")]
-        public IEnumerable<string> Subjects { get; set; } = new string[] {">"};
+        [CommandLine.Option('s', "subjects", HelpText = "Nats subjects to listen")]
+        public IEnumerable<string> Subjects { get; set; }
 
-        [CommandLine.Option('c', "count", HelpText="Exists after c messages", Default=-1)]
+        [CommandLine.Option('c', "count", HelpText = "Exists after c messages", Default = -1)]
         public int Count { get; set; } = -1;
 
-        [CommandLine.Option('t', "time", HelpText="Exits after t seconds", Default=-1)]
+        [CommandLine.Option('t', "time", HelpText = "Exits after t seconds", Default = -1)]
         public int TimeS { get; set; } = -1;
     }
 
@@ -44,6 +45,10 @@ namespace nats_tools
         static int ListenSubject(ListenOptions options)
         {
             options.Start();
+            if (options.Subjects == null || !options.Subjects.Any())
+            {
+                options.Subjects = new[] { ">" };
+            }
             foreach (var subject in options.Subjects)
             {
                 Console.WriteLine($"Listen: {subject}");
@@ -54,6 +59,7 @@ namespace nats_tools
 
         private static void OnMessage(object sender, MsgHandlerEventArgs e)
         {
+            Console.WriteLine($"{DateTime.Now:HH:mm:ss}\t{e.Message.Subject}\t{e.Message.Data.Length}");
         }
     }
 }
