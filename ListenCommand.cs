@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Text;
 using NATS.Client;
 using NLog;
 
@@ -26,7 +27,8 @@ namespace nats_tools
         private static void OnMessage(object sender, MsgHandlerEventArgs e)
         {
             Logger logger = LogManager.GetLogger(e.Message.Subject);
-            logger.Info($"{DateTime.Now:HH:mm:ss}\t{e.Message.Data.Length}");
+            string msgTxt = Encoding.Default.GetString(e.Message.Data);
+            logger.Info($"{e.Message.Data.Length} - '{msgTxt}'");
         }
     }
 }
