@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using CommandLine;
+using NLog;
 
 namespace nats_tools
 {
@@ -8,6 +9,7 @@ namespace nats_tools
     {
         static int Main(string[] args)
         {
+            
             return CommandLine.Parser.Default.ParseArguments<ListenOptions, SendOptions>(args)
               .MapResult(
                 (ListenOptions opts) => RunCommand<ListenCommand, ListenOptions>(opts),
