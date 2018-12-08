@@ -19,7 +19,7 @@ Sends a NATS message.
   -m, --msg        Required. Nats message content
 ````
 
-## Exemple
+## Example
 dotnet run  send -s "TEST" -m '{"values":[{    "fruit": "Apple",    "price": "1.23",    "color": "Red"},{    "fruit": "Apple",    "price": "2.34",    "color": "Green"},{    "fruit": "Orange",    "price": "3.45",    "color": "orange"}]}'
 
 
