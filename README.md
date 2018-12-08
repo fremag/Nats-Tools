@@ -4,11 +4,12 @@ Some command line toosl for Nats: listen, send, request, stats...
 Syntax: nats-tool [command] [options...]
 
 Commands:
-*  listen     Listen to Nats subject
-*  send       Send Nats message
-*  help       Display more information on a specific command.
-*  version    Display version information.
-
+````
+  listen     Listen to Nats subject
+  send       Send Nats message
+  help       Display more information on a specific command.
+  version    Display version information.
+````
 # Send
 Sends a NATS message.
 
