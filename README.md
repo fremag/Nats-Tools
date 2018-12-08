@@ -60,21 +60,39 @@ Message sent:
 * listen -s TEST -j
 
 > 18:54:10.0974 - Info - TEST - 204 - {
+
 >   "values": [
+
 >     {
+
 >       "fruit": "Apple",
+
 >       "price": "1.23",
+
 >       "color": "Red"
+
 >     },
+
 >     {
+
 >       "fruit": "Apple",
+
 >       "price": "2.34",
+
 >       "color": "Green"
+
 >     },
+
 >     {
+
 >       "fruit": "Orange",
+
 >       "price": "3.45",
+
 >       "color": "orange"
+
 >     }
+
 >   ]
+
 > }
