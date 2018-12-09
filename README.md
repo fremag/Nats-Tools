@@ -35,6 +35,8 @@ If message is a JSON string, it's possible to extract tokens from it or format a
   -t, --tokens       JSON tokens to extract
   -d, --delimiter    (Default: ,) Token output delimiter
   -j, --json         (Default: false) JSON pretty print
+  -c, --count        Exists after n messages
+  -w, --wait         Waits for n seconds then exits
 ````  
 
 ## Examples

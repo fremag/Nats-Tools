@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using NATS.Client;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -12,6 +13,7 @@ namespace nats_tools
     internal class ListenCommand : AbstractNatsCommand<ListenOptions>
     {
         private readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private int NbMessages { get; set; }
         public override int Run()
         {
             if (Options.Subjects == null || !Options.Subjects.Any())
@@ -23,12 +25,24 @@ namespace nats_tools
                 logger.Info($"Listen: {subject}");
                 Options.Connection.SubscribeAsync(subject, OnMessage);
             }
+            DateTime end = DateTime.Now.AddSeconds(Options.Wait);
+            if (Options.Count <= 0 && Options.Wait <= 0)
+            {
+                return 0;
+            }
 
+            NbMessages = Options.Count;
+            while ((Options.Count > 0 && NbMessages > 0) && (Options.Wait > 0 && DateTime.Now < end))
+            {
+                Thread.Sleep(100);
+            }
+            Options.Connection.Close();
             return 0;
         }
 
         private void OnMessage(object sender, MsgHandlerEventArgs e)
         {
+            NbMessages--;
             Logger logger = LogManager.GetLogger(e.Message.Subject);
             string msgTxt = Encoding.Default.GetString(e.Message.Data);
             if (Options.Json)
