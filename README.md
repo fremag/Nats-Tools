@@ -1,5 +1,5 @@
 # Nats-Tools
-Some command line toosl for Nats: listen, send, request, stats...
+Some command line tools for Nats: listen, send, request, stats...
 
 Syntax: nats-tool [command] [options...]
 
