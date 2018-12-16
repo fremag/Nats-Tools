@@ -59,6 +59,15 @@ Sends a NATS message.
 20:29:57.4725 - Info - nats_tools.SendCommand - Send: A.B.C => 'Hello ! 5 20:29:57.472'
 ````            
 
+* send -s "A.B.C" -m "Hello ! {n} {time}" -w 3 -p 500 -l 50
+````
+20:47:44.6341 - Info - nats_tools.SendCommand - Send: A.B.C => 'Hello ! 0 20:47:44.605' - 50 bytes
+20:47:45.1438 - Info - nats_tools.SendCommand - Send: A.B.C => 'Hello ! 1 20:47:45.143' - 50 bytes
+20:47:45.6440 - Info - nats_tools.SendCommand - Send: A.B.C => 'Hello ! 2 20:47:45.644' - 50 bytes
+20:47:46.1446 - Info - nats_tools.SendCommand - Send: A.B.C => 'Hello ! 3 20:47:46.144' - 50 bytes
+20:47:46.6456 - Info - nats_tools.SendCommand - Send: A.B.C => 'Hello ! 4 20:47:46.645' - 50 bytes
+20:47:47.1465 - Info - nats_tools.SendCommand - Send: A.B.C => 'Hello ! 5 20:47:47.146' - 50 bytes
+````
 
 # Listen
 Listen to one or more subjects, display received messages. 

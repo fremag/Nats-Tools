@@ -14,7 +14,7 @@ namespace nats_tools
         [Option('p', "period", HelpText = "Time in ms between messages", Default = 1000)]
         public int Period { get; set; }
 
-        [Option('f', "fill", HelpText = "Appends bytes to message so its length is equal to 'fill' value", Default = 0)]
+        [Option('l', "length", HelpText = "Message length. If -m is specified, its length is filled or reduced as needed. 0 means the message is not modified", Default = 0)]
         public int Length { get; set; }
 
         [Option('c', "count", HelpText = "Exists after n messages", Default = 1)]
