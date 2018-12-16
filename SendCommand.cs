@@ -39,7 +39,7 @@ namespace nats_tools
                 }
                 if (msgTxt.Length > 80)
                 {
-                    msgTxt = msgTxt.Substring(80) + "...";
+                    msgTxt = msgTxt.Substring(0, 80) + "...";
                 }
                 logger.Info($"Send: {Options.Subject} => '{msgTxt}' - {data.Length} bytes");
                 Options.Connection.Publish(Options.Subject, data);
