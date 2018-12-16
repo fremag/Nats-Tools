@@ -28,6 +28,7 @@ namespace nats_tools
             DateTime end = DateTime.Now.AddSeconds(Options.Wait);
             if (Options.Count <= 0 && Options.Wait <= 0)
             {
+                Options.Connection.Close();
                 return 0;
             }
 
