@@ -15,7 +15,7 @@ namespace nats_tools
         [Option('d', "delimiter", HelpText = "Token output delimiter", Default = ",")]
         public string Delimiter { get; set; }
 
-        [Option('c', "count", HelpText = "Exists after n messages", Default = -1)]
+        [Option('c', "count", HelpText = "Exits after n messages", Default = -1)]
         public int Count { get; set; } = -1;
 
         [Option('w', "wait", HelpText = "Waits for n seconds then exits", Default = -1)]

@@ -41,8 +41,27 @@ namespace nats_tools
                 {
                     msgTxt = msgTxt.Substring(0, 80) + "...";
                 }
-                logger.Info($"Send: {Options.Subject} => '{msgTxt}' - {data.Length} bytes");
-                Options.Connection.Publish(Options.Subject, data);
+
+                if (Options.Request)
+                {
+                    logger.Info($"Request: {Options.Subject} => '{msgTxt}' - {data.Length} bytes");
+                    try
+                    {
+                        var msgReply = Options.Connection.Request(Options.Subject, data, Options.Timeout);
+                        var replyTxt = Encoding.Default.GetString(msgReply.Data);
+                        logger.Info($"Reply: '{replyTxt}' - {data.Length} bytes");
+                    }
+                    catch (TimeoutException)
+                    {
+                        logger.Error("Timeout !");
+                    }
+                }
+                else
+                {
+                    logger.Info($"Send: {Options.Subject} => '{msgTxt}' - {data.Length} bytes");
+                    Options.Connection.Publish(Options.Subject, data);
+                }
+
                 NbMessages++;
                 if (Options.Period > 0)
                 {

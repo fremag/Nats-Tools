@@ -24,7 +24,7 @@ Sends a NATS message.
   -f, --fill       (Default: 0) Appends bytes to message so its length is equal
                    to 'fill' value
 
-  -c, --count      (Default: 1) Exists after n messages
+  -c, --count      (Default: 1) Exits after n messages
   -w, --wait       (Default: -1) Waits for n seconds then exits
   -n, --nats       Nats server url, default: nats://localhost:4222
 ````
@@ -80,7 +80,7 @@ If message is a JSON string, it's possible to extract tokens from it or format a
   -t, --tokens       JSON tokens to extract
   -d, --delimiter    (Default: ,) Token output delimiter
   -j, --json         (Default: false) JSON pretty print
-  -c, --count        Exists after n messages
+  -c, --count        Exits after n messages
   -w, --wait         Waits for n seconds then exits
 ````  
 

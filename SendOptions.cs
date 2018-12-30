@@ -17,10 +17,16 @@ namespace nats_tools
         [Option('l', "length", HelpText = "Message length. If -m is specified, its length is filled or reduced as needed. 0 means the message is not modified", Default = 0)]
         public int Length { get; set; }
 
-        [Option('c', "count", HelpText = "Exists after n messages", Default = 1)]
+        [Option('c', "count", HelpText = "Exits after n messages", Default = 1)]
         public int Count { get; set; }
 
         [Option('w', "wait", HelpText = "Waits for n seconds then exits", Default = -1)]
         public int Wait { get; set; } = -1;
+
+        [Option('r', "request", HelpText = "Sends a request and waits for a reply", Default = false)]
+        public bool Request { get; set; }
+
+        [Option('t', "timeout", HelpText = "Time in milliseconds to wait for a reply", Default = 10000)]
+        public int Timeout { get; set; }
     }
 }
