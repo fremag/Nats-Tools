@@ -32,7 +32,7 @@ Sends a NATS message.
 ## Examples
 * send -s "TEST" -m '{"values":[{    "fruit": "Apple",    "price": "1.23",    "color": "Red"},{    "fruit": "Apple",    "price": "2.34",    "color": "Green"},{    "fruit": "Orange",    "price": "3.45",    "color": "orange"}]}'
 ````
-20:28:07.9603 - Info - nats_tools.SendCommand - Send: A.B.C => 'ruit": "Apple",    "price": "2.34",    "color": "Green"},{    "fruit": "Orange",    "price": "3.45",    "color": "orange"}]}...'
+20:28:07.9603 - Info - nats_tools.SendCommand - Send: A.B.C => 'fruit": "Apple",    "price": "2.34",    "color": "Green"},{    "fruit": "Orange",    "price": "3.45",    "color": "orange"}]}...'
 ````            
 
 * send -s "A.B.C" -m "Hello ! {n} {time}" -c 10 -p 500

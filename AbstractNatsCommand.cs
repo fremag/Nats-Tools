@@ -1,5 +1,3 @@
-using System;
-
 namespace nats_tools
 {
     internal abstract class AbstractNatsCommand<T> where T : AbstractNatsOptions

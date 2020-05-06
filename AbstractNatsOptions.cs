@@ -11,7 +11,7 @@ namespace nats_tools
 
         public void Start()
         {
-            NATS.Client.ConnectionFactory factory = new NATS.Client.ConnectionFactory();
+            var factory = new ConnectionFactory();
             Connection = factory.CreateConnection(NatsUrl);
         }
     }

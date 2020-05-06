@@ -20,20 +20,18 @@ namespace nats_tools
             {
                 Options.Subjects = new[] { ">" };
             }
+            
             foreach (var subject in Options.Subjects)
             {
                 logger.Info($"Listen: {subject}");
                 Options.Connection.SubscribeAsync(subject, OnMessage);
             }
-            DateTime end = DateTime.Now.AddSeconds(Options.Wait);
-            if (Options.Count <= 0 && Options.Wait <= 0)
-            {
-                Options.Connection.Close();
-                return 0;
-            }
 
+            DateTime end = DateTime.Now.AddSeconds(Options.Wait);
             NbMessages = Options.Count;
-            while ((Options.Count > 0 && NbMessages > 0) && (Options.Wait > 0 && DateTime.Now < end))
+            while (
+                   (Options.Count <= 0 || NbMessages > 0)
+                && (Options.Wait < 0 || DateTime.Now < end))
             {
                 Thread.Sleep(100);
             }
@@ -54,14 +52,22 @@ namespace nats_tools
 
             if (Options.Tokens.Any())
             {
-                JObject o = JObject.Parse(msgTxt);
-                var logTxt = $"{e.Message.Data.Length} - ";
-                logTxt += string.Join(Options.Delimiter, Options.Tokens.Select(token => o.SelectToken(token).ToString()));
-                logger.Info(logTxt);
-                return;
+                try
+                {
+                    JObject o = JObject.Parse(msgTxt);
+                    var logTxt = $"{e.Message.Data.Length} - ";
+                    logTxt += string.Join(Options.Delimiter, Options.Tokens.Select(token => o.SelectToken(token).ToString()));
+                    logger.Info(logTxt);
+                }
+                catch (Exception ex)
+                {
+                    logger.Error($"{ex.Message}, JSon message: {msgTxt}");
+                }
             }
-
-            logger.Info($"{e.Message.Data.Length} - '{msgTxt}'");
+            else
+            {
+                logger.Info($"{e.Message.Data.Length} - '{msgTxt}'");
+            }
         }
 
         public static string JsonPrettify(string json)
