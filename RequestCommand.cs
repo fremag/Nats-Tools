@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using NATS.Client;
 using NLog;
 
 namespace nats_tools
@@ -20,9 +21,9 @@ namespace nats_tools
                 var replyTxt = Encoding.Default.GetString(msgReply.Data);
                 Logger.Info($"Reply: '{replyTxt}' - {data.Length} bytes");
             }
-            catch (TimeoutException)
+            catch (NATSTimeoutException e)
             {
-                Logger.Error("Timeout !");
+                Logger.Error(e.Message);
             }
         }
     }
