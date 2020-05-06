@@ -1,10 +1,8 @@
 using System;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using NATS.Client;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 
@@ -12,8 +10,14 @@ namespace nats_tools
 {
     internal class ListenCommand : AbstractNatsCommand<ListenOptions>
     {
-        private readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private new static Logger Logger { get; } = LogManager.GetCurrentClassLogger();
+
         private int NbMessages { get; set; }
+        
+        public ListenCommand() : base(Logger)
+        {
+        }
+
         public override int Run()
         {
             if (Options.Subjects == null || !Options.Subjects.Any())
@@ -23,7 +27,7 @@ namespace nats_tools
             
             foreach (var subject in Options.Subjects)
             {
-                logger.Info($"Listen: {subject}");
+                Logger.Info($"Listen: {subject}");
                 Options.Connection.SubscribeAsync(subject, OnMessage);
             }
 
@@ -67,18 +71,6 @@ namespace nats_tools
             else
             {
                 logger.Info($"{e.Message.Data.Length} - '{msgTxt}'");
-            }
-        }
-
-        public static string JsonPrettify(string json)
-        {
-            using (var stringReader = new StringReader(json))
-            using (var stringWriter = new StringWriter())
-            {
-                var jsonReader = new JsonTextReader(stringReader);
-                var jsonWriter = new JsonTextWriter(stringWriter) { Formatting = Formatting.Indented };
-                jsonWriter.WriteToken(jsonReader);
-                return stringWriter.ToString();
             }
         }
     }

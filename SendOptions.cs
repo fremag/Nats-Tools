@@ -3,7 +3,7 @@ using CommandLine;
 namespace nats_tools
 {
     [Verb("send", HelpText = "Send Nats messages")]
-    class SendOptions : AbstractNatsOptions
+    public class SendOptions : AbstractNatsOptions
     {
         [Option('s', "subject", Required = true, HelpText = "Nats message subject")]
         public string Subject { get; set; }
@@ -22,11 +22,5 @@ namespace nats_tools
 
         [Option('w', "wait", HelpText = "Waits for n seconds then exits", Default = -1)]
         public int Wait { get; set; } = -1;
-
-        [Option('r', "request", HelpText = "Sends a request and waits for a reply", Default = false)]
-        public bool Request { get; set; }
-
-        [Option('t', "timeout", HelpText = "Time in milliseconds to wait for a reply", Default = 10000)]
-        public int Timeout { get; set; }
     }
 }

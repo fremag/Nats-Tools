@@ -12,15 +12,20 @@ namespace nats_tools
 {
     internal class ReplyCommand : AbstractNatsCommand<ReplyOptions>
     {
-        private readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private new static Logger Logger { get; }= LogManager.GetCurrentClassLogger();
         private int NbMessages { get; set; }
+        
+        public ReplyCommand() : base(Logger)
+        {
+        }
+
         public override int Run()
         {
             if (Options.Subject == null)
             {
                 Options.Subject = ">";
             }
-            logger.Info($"Reply: {Options.Subject}");
+            Logger.Info($"Reply: {Options.Subject}");
             Options.Connection.SubscribeAsync(Options.Subject, OnMessage);
 
             if (Options.Count <= 0 && Options.Wait <= 0)

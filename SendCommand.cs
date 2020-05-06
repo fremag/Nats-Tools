@@ -5,17 +5,36 @@ using NLog;
 
 namespace nats_tools
 {
-    internal class SendCommand : AbstractNatsCommand<SendOptions>
+    public class SendCommand : AbstractSendCommand<SendOptions>
     {
-        private readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private new static Logger Logger { get; } = LogManager.GetCurrentClassLogger();
+        public SendCommand() : base(Logger)
+        {
+        }
 
+        protected override void DoWork(string msgTxt, byte[] data)
+        {
+            Logger.Info($"Send: {Options.Subject} => '{msgTxt}' - {data.Length} bytes");
+            Options.Connection.Publish(Options.Subject, data);
+        }
+    }
+    
+    public abstract class AbstractSendCommand<T> : AbstractNatsCommand<T> where T : SendOptions 
+    {
         int NbMessages { get; set; }
+        protected abstract void DoWork(string msgTxt, byte[] data);
+        
+        protected AbstractSendCommand(Logger logger) : base(logger)
+        {
+        }
+
         public override int Run()
         {
             NbMessages = 0;
             DateTime end = DateTime.Now.AddSeconds(Options.Wait);
 
-            while ((Options.Count > 0 && NbMessages < Options.Count) || (Options.Wait > 0 && DateTime.Now < end))
+            while (   (Options.Count > 0 && NbMessages < Options.Count)
+                   || (Options.Wait > 0 && DateTime.Now < end))
             {
                 var msg = Options.Message;
                 msg = msg.Replace("{time}", DateTime.Now.ToString("HH:mm:ss.fff"));
@@ -42,25 +61,7 @@ namespace nats_tools
                     msgTxt = msgTxt.Substring(0, 80) + "...";
                 }
 
-                if (Options.Request)
-                {
-                    logger.Info($"Request: {Options.Subject} => '{msgTxt}' - {data.Length} bytes");
-                    try
-                    {
-                        var msgReply = Options.Connection.Request(Options.Subject, data, Options.Timeout);
-                        var replyTxt = Encoding.Default.GetString(msgReply.Data);
-                        logger.Info($"Reply: '{replyTxt}' - {data.Length} bytes");
-                    }
-                    catch (TimeoutException)
-                    {
-                        logger.Error("Timeout !");
-                    }
-                }
-                else
-                {
-                    logger.Info($"Send: {Options.Subject} => '{msgTxt}' - {data.Length} bytes");
-                    Options.Connection.Publish(Options.Subject, data);
-                }
+                DoWork(msgTxt, data);
 
                 NbMessages++;
                 if (Options.Period > 0)
