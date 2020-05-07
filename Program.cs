@@ -6,12 +6,13 @@ namespace nats_tools
     {
         static int Main(string[] args)
         {
-            return Parser.Default.ParseArguments<ListenOptions, SendOptions, RequestOptions, ReplyOptions>(args)
+            return Parser.Default.ParseArguments(args, typeof(ListenOptions), typeof(SendOptions), typeof(RequestOptions), typeof(ReplyOptions), typeof(StatOptions))
               .MapResult(
                 (ListenOptions opts) => RunCommand<ListenCommand, ListenOptions>(opts),
                 (RequestOptions opts) => RunCommand<RequestCommand, RequestOptions>(opts),
                 (SendOptions opts) => RunCommand<SendCommand, SendOptions>(opts),
                 (ReplyOptions opts) => RunCommand<ReplyCommand, ReplyOptions>(opts),
+                (StatOptions opts) => RunCommand<StatCommand, StatOptions>(opts),
                 errs => 1);
         }
 

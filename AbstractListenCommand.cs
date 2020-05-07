@@ -37,7 +37,13 @@ namespace nats_tools
                 Thread.Sleep(100);
             }
             Options.Connection.Close();
+            Dispose();
             return 0;
+        }
+
+        protected virtual void Dispose()
+        {
+            
         }
     }
 }
