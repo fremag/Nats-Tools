@@ -1,6 +1,9 @@
 # Nats-Tools
 Some command line tools for Nats: listen, send, request, stats...
 
+Binaries (built by Github/actions): [Wi64](https://github.com/fremag/Nats-Tools/suites/794769485/artifacts/8511992) - [Linux](
+https://github.com/fremag/Nats-Tools/suites/794769485/artifacts/8511991)
+
 Syntax: nats-tool [command] [options...]
 
 Commands:
