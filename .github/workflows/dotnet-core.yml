@@ -31,11 +31,12 @@ jobs:
     - name: Artifact Linux
       uses: actions/upload-artifact@v2
       with:
-        name: my-artifact
+        name: nats-tools-linux
         path: publish-linux/*
+      
     - name: Artifact Windows
       uses: actions/upload-artifact@v2
       with:
-        name: my-artifact
+        name: nats-tools-win64
         path: publish-win/*
       
