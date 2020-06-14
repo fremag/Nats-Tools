@@ -8,29 +8,30 @@ Syntax: nats-tool [command] [options...]
 
 Commands:
 ````
+  send       Send Nats messages
   listen     Listen to Nats subject
-  send       Send Nats message
+  request    Send Nats request messages
+  reply      Reply to Nats requests
+  stat       Statistics on received Nats messages
   help       Display more information on a specific command.
   version    Display version information.
-````
+ ````
+
 # Send
 Sends a NATS message.
 
 ## Parameters
 ````
-  -n, --nats       Nats server url, default: nats://localhost:4222
   -s, --subject    Required. Nats message subject
-  -m, --msg        Required. Nats message content. Variables: {n} : message
-                   number, {time} : local time (format hh:mm:ss.fff)
-
+  -m, --msg        Required. Nats message content. Variables: {n} : message number, {time} : local time (format hh:mm:ss.fff)
   -p, --period     (Default: 1000) Time in ms between messages
-  -f, --fill       (Default: 0) Appends bytes to message so its length is equal
-                   to 'fill' value
+  -l, --length     (Default: 0) Message length. If -m is specified, its length is filled or reduced as needed. 0 means
+                   the message is not modified
 
   -c, --count      (Default: 1) Exits after n messages
   -w, --wait       (Default: -1) Waits for n seconds then exits
   -n, --nats       Nats server url, default: nats://localhost:4222
-````
+  ````
 
 ## Examples
 * send -s "TEST" -m '{"values":[{    "fruit": "Apple",    "price": "1.23",    "color": "Red"},{    "fruit": "Apple",    "price": "2.34",    "color": "Green"},{    "fruit": "Orange",    "price": "3.45",    "color": "orange"}]}'
@@ -126,4 +127,48 @@ Message sent:
     }
   ]
 }
+````
+# Request
+Send a request message and waits the reply
+## Parameters
+````
+  -t, --timeout    (Default: 10000) Time in milliseconds to wait for a reply
+  -s, --subject    Required. Nats message subject
+  -m, --msg        Required. Nats message content. Variables: {n} : message number, {time} : local time (format
+                   hh:mm:ss.fff)
+  -p, --period     (Default: 1000) Time in ms between messages
+  -l, --length     (Default: 0) Message length. If -m is specified, its length is filled or reduced as needed. 0 means
+                   the message is not modified
+  -c, --count      (Default: 1) Exits after n messages
+  -w, --wait       (Default: -1) Waits for n seconds then exits
+  -n, --nats       Nats server url, default: nats://localhost:4222
+
+````
+
+# Reply
+Listen to a subject and send a reply message if a request message is received.  
+
+## Parameters
+````
+  -m, --msg         Required. Nats message content. Variables: {n} : message number, {time} : local time (format
+                    hh:mm:ss.fff)
+  -l, --length      (Default: 0) Message length. If -m is specified, its length is filled or reduced as needed. 0 means
+                    the message is not modified
+
+  -s, --subjects    Nats subjects to listen
+  -c, --count       (Default: -1) Exits after n messages
+  -w, --wait        (Default: -1) Waits for n seconds then exits
+  -n, --nats        Nats server url, default: nats://localhost:4222
+````
+ 
+# Stat
+Listen to one or more subjects and display some statistics about received messages: count, size etc
+
+## Parameters
+````
+  -p, --period      (Default: 5000) Time in ms between stats print
+  -s, --subjects    Nats subjects to listen
+  -c, --count       (Default: -1) Exits after n messages
+  -w, --wait        (Default: -1) Waits for n seconds then exits
+  -n, --nats        Nats server url, default: nats://localhost:4222
 ````
