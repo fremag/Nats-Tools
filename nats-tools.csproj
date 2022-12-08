@@ -11,7 +11,7 @@
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.3.65" />
     <PackageReference Include="nats.client" Version="0.8.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="nlog" Version="4.5.11" />
     <None Include="NLog.config" CopyToOutputDirectory="Always" />
   </ItemGroup>  
